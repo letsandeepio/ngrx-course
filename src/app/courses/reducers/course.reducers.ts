@@ -3,7 +3,9 @@ import { Course, compareCourses } from "../model/course";
 import { createReducer, on } from "@ngrx/store";
 import { CourseActions } from "../action-types";
 
-export interface CoursesState extends EntityState<Course> {}
+export interface CoursesState extends EntityState<Course> {
+  allCoursesLoaded: boolean;
+}
 
 export const adapter = createEntityAdapter<Course>({
   sortComparer: compareCourses,
@@ -14,7 +16,7 @@ export const initialCoursesState = adapter.getInitialState();
 export const coursesReducer = createReducer(
   initialCoursesState,
   on(CourseActions.allCoursesLoaded, (state, action) =>
-    adapter.setAll(action.courses, state)
+    adapter.setAll(action.courses, { ...state, allCoursesLoaded: true })
   )
 );
 
